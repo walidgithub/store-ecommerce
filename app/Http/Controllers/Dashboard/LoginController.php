@@ -13,6 +13,16 @@ class LoginController extends Controller
         return view('dashboard.auth.login');
     }
 
+    public function logout(){
+        $gaurd = $this->getGaurd();
+        $gaurd->logout();
+        return redirect()->route('admin.login');
+    }
+
+    private function getGaurd(){
+        return auth('admin');
+    }
+
     public function postLogin(AdminLoginRequest $request){
 
         //shorthand if condition

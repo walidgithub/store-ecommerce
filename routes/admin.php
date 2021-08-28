@@ -31,6 +31,8 @@ Route::group(['namespace' => 'Dashboard', 'middleware' => 'auth:admin', 'prefix'
         ->name('update.shippings.methods');
     });
 
+    Route::get('logout','LoginController@logout')->name('admin.logout');
+
 });
 
 
