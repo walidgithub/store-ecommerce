@@ -28,22 +28,67 @@
                                 class="ficon ft-maximize"></i></a></li>
                 </ul>
                 <ul class="nav navbar-nav float-right">
+                    {{-- languages --}}
+
                     <li class="dropdown dropdown-user nav-item">
                         <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                <span class="mr-1">مرجبا
+                <span class="mr-1">
+                  <span
+                      class="user-name text-bold-700">{{ App::getlocale()}}</span>
+                </span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            @php
+            $i=0;                
+          $x=0;
+      @endphp
+
+@foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+@php
+          $i++;
+      @endphp
+@endforeach
+      
+
+                            @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                    <a class="dropdown-item"  rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                        {{ $properties['native'] }}
+                                    </a>
+
+@if ( $x < $i-1)
+<div class="dropdown-divider"></div>
+@endif
+                        
+@php
+          $x++;
+      @endphp
+                            @endforeach
+
+                        </div>
+                        
+                    </li>
+
+                    {{-- users --}}
+
+                    <li class="dropdown dropdown-user nav-item">
+                        <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                <span class="mr-1">مرحبا
                   <span
                       class="user-name text-bold-700">{{auth('admin') -> user() -> name}}</span>
                 </span>
                             <span class="avatar avatar-online">
                   <img  style="height: 35px;" src="" alt="avatar"><i></i></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href=""><i
+                        <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{ route('edit.profile')}}"><i
                                     class="ft-user"></i> تعديل الملف الشحصي </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="ft-power"></i> تسجيل
                                 الخروج </a>
                         </div>
                     </li>
+
+                    {{-- ------ --}}
 
                     <li class="dropdown dropdown-notification nav-item">
                         <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon ft-bell"></i>

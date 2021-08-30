@@ -33,6 +33,14 @@ Route::group(['namespace' => 'Dashboard', 'middleware' => 'auth:admin', 'prefix'
 
     Route::get('logout','LoginController@logout')->name('admin.logout');
 
+    Route::group(['prefix' => 'profile'],function(){
+        Route::get('edit','ProfileController@editProfile')
+        ->name('edit.profile');
+
+        Route::put('update','ProfileController@updateProfile')
+        ->name('update.profile');
+    });
+
 });
 
 
