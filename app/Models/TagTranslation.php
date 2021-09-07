@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CategoryTranslation extends Model
+class TagTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable =['name'];
+    protected $guarded =[];
 
     //to ignore timestamps
     public $timestamps = false;
-
 }
