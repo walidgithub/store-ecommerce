@@ -74,6 +74,17 @@ Route::group(['namespace' => 'Dashboard', 'middleware' => 'auth:admin', 'prefix'
         Route::post('update/{id}','BrandsController@update') -> name('admin.brands.update');
         Route::get('delete/{id}','BrandsController@destroy') -> name('admin.brands.delete');
     });
+
+    // Tags ---------------
+
+    Route::group(['prefix' => 'tags'], function () {
+        Route::get('/','TagsController@index') -> name('admin.tags');
+        Route::get('create','TagsController@create') -> name('admin.tags.create');
+        Route::post('store','TagsController@store') -> name('admin.tags.store');
+        Route::get('edit/{id}','TagsController@edit') -> name('admin.tags.edit');
+        Route::post('update/{id}','TagsController@update') -> name('admin.tags.update');
+        Route::get('delete/{id}','TagsController@destroy') -> name('admin.tags.delete');
+    });
 });
 
 

@@ -61,7 +61,7 @@ class SubCategoriesController extends Controller
     public function edit($id)
     {
         //get specific categories and its translations
-        $category = Category::orderBy('id','DESC')->find($id);
+        $category = Category::find($id);
 
         if (!$category)
             return redirect()->route('admin.subcategories')->with(['error' => 'هذا القسم غير موجود ']);
@@ -112,7 +112,7 @@ class SubCategoriesController extends Controller
 
         try {
 
-            $category = Category::orderBy('id','DESC')->find($id);
+            $category = Category::find($id);
             if (!$category)
                 return redirect()->route('admin.subcategories')->with(['error' => 'هذا القسم غير موجود ']);
 

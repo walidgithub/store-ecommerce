@@ -41,6 +41,7 @@ class Category extends Model
         return $this->is_active == 0 ? 'غير مفعل' : 'مفعل';
     }
 
+    //to get all categories that have parent_id not null
     public function _parent(){
         return $this->belongsTo(self::class, 'parent_id');
     }

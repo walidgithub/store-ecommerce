@@ -24,7 +24,7 @@ class BrandsController extends Controller
     public function store(BrandRequest $request)
     {
 
-        // try {  
+        try {  
 
             if (!$request->has('is_active'))
                 $request->request->add(['is_active' => 0]);
@@ -51,10 +51,10 @@ class BrandsController extends Controller
             return redirect()->route('admin.brands')->with(['success' => 'تم الحفظ بنجاح']);
             
 
-        // } catch (\Exception $ex) {
-        //     DB::rollback();
-        //     return redirect()->route('admin.brands')->with(['error' => 'حدث خطا ما برجاء المحاوله لاحقا']);
-        // }
+        } catch (\Exception $ex) {
+            DB::rollback();
+            return redirect()->route('admin.brands')->with(['error' => 'حدث خطا ما برجاء المحاوله لاحقا']);
+        }
 
     }
 
@@ -62,10 +62,10 @@ class BrandsController extends Controller
     public function edit($id)
     {
         //get specific brands and its translations
-        $brand = Brand::orderBy('id','DESC')->find($id);
+        $brand = Brand::find($id);
 
         if (!$brand)
-            return redirect()->route('admin.brands')->with(['error' => 'هذا القسم غير موجود ']);
+            return redirect()->route('admin.brands')->with(['error' => 'هذه الماركة غير موجودة ']);
 
         return view('dashboard.brands.edit', compact('brand'));
     }
@@ -79,7 +79,15 @@ class BrandsController extends Controller
             $brand=Brand::find($id);
 
             if(!$brand)
-                return redirect()->route('admin.brands')->with(['error' => 'هذا القسم غير موجود']);    
+                return redirect()->route('admin.brands')->with(['error' => 'هذه الماركة غير موجودة']);    
+
+            DB::beginTransaction();
+
+            $fileName = "";
+            if ($request->has('photo')) {
+                $fileName = uploadImage('brands', $request->photo);
+                Brand::where('id',$id)->update(['photo' => $fileName]);
+            }
 
             if (!$request->has('is_active'))
                 $request->request->add(['is_active' => 0]);
@@ -87,7 +95,7 @@ class BrandsController extends Controller
                 $request->request->add(['is_active' => 1]);
 
 
-            $brand -> update($request->all());
+            $brand -> update($request->except('_token','id','photo'));
 
             //save translation
             //field 'name' in table 'brand_translations'
@@ -96,10 +104,10 @@ class BrandsController extends Controller
             $brand->save();
 
 
-
+            DB::commit();
             return redirect()->route('admin.brands')->with(['success' => 'تم التحديث بنجاح']);
         } catch (\Exception $ex) {
-
+            DB::rollback();
             return redirect()->route('admin.brands')->with(['error' => 'حدث خطا ما برجاء المحاوله لاحقا']);
         }
 
@@ -111,13 +119,13 @@ class BrandsController extends Controller
 
         try {
 
-            $brand = Brand::orderBy('id','DESC')->find($id);
+            $brand = Brand::find($id);
             if (!$brand)
-                return redirect()->route('admin.brands')->with(['error' => 'هذا القسم غير موجود ']);
+                return redirect()->route('admin.brands')->with(['error' => 'هذا العنصر غير موجود ']);
 
 
             $brand->delete();
-            return redirect()->route('admin.brands')->with(['success' => 'تم حذف القسم بنجاح']);
+            return redirect()->route('admin.brands')->with(['success' => 'تم حذف العنصر بنجاح']);
 
         } catch (\Exception $ex) {
             return redirect()->route('admin.brands')->with(['error' => 'حدث خطا ما برجاء المحاوله لاحقا']);
